@@ -16,32 +16,18 @@ export const getV2Response = async (clientParams) => {
 export const getV3Response = async (clientParams) => {
   const client = new DynamoDB(clientParams);
 
-  client.middlewareStack.add(
-    (next, context) => async (args) => {
-      console.log("AWS SDK context", context.clientName, context.commandName);
-      console.log("AWS SDK request input", args.input);
-      const result = await next(args);
-      console.log("AWS SDK request output:", result.output);
-      return result;
-    },
-    {
-      name: "MyMiddleware",
-      step: "build",
-      override: true,
-    }
-  );
   return client.listTables({ Limit: 1 });
 };
 
-// export const getV2BrowserResponse = async () => {
-//   // Initialize the Amazon Cognito credentials provider
-//   AWS.config.region = REGION;
-//   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-//     IdentityPoolId: IDENTITY_POOL_ID,
-//   });
+export const getV2BrowserResponse = async () => {
+  // Initialize the Amazon Cognito credentials provider
+  AWS.config.region = REGION;
+  AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: IDENTITY_POOL_ID,
+  });
 
-//   return getV2Response({ region: REGION });
-// };
+  return getV2Response({ region: REGION });
+};
 
 export const getV3BrowserResponse = async () =>
   getV3Response({
